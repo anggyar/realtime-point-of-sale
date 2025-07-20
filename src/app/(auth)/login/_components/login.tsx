@@ -1,5 +1,6 @@
 "use client";
 
+import FormInput from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -42,44 +43,24 @@ export default function Login() {
                 <Form {...form}>
                     <form onSubmit={onSubmit} className="space-y-4">
                         {/* EMAIL FIELD */}
-                        <FormField
-                            control={form.control}
+                        <FormInput
+                            form={form}
                             name="email"
-                            render={({ field: { ...rest } }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...rest}
-                                            type="email"
-                                            placeholder="Insert your email"
-                                            autoComplete="off"
-                                        ></Input>
-                                    </FormControl>
-                                    <FormMessage className="text-xs" />
-                                </FormItem>
-                            )}
-                        />
+                            label="Email"
+                            placeholder="Insert email here"
+                            type="email"
+                        ></FormInput>
 
                         {/* PASSWORD */}
-                        <FormField
-                            control={form.control}
+                        <FormInput
+                            form={form}
                             name="password"
-                            render={({ field: { ...rest } }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...rest}
-                                            type="email"
-                                            placeholder="********"
-                                            autoComplete="off"
-                                        ></Input>
-                                    </FormControl>
-                                    <FormMessage className="text-xs" />
-                                </FormItem>
-                            )}
+                            label="Password"
+                            placeholder="********"
+                            type="password"
                         />
+
+                        {/* LOGIN BUTTON */}
                         <Button type="submit">Login</Button>
                     </form>
                 </Form>
