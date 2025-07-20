@@ -7,24 +7,22 @@ export async function updateSession(request: NextRequest) {
         request,
     });
 
-    const { SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY } =
-        environment;
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = environment;
 
+    // Set data supabase
     const supabase = createServerClient(SUPABASE_URL!, SUPABASE_ANON_KEY!, {
         cookies: {
             getAll() {
                 return request.cookies.getAll();
             },
             setAll(cookiesToSet) {
-                cookiesToSet.forEach(({ name, value }) => {
-                    return cookieStore.set(name, value);
-                });
-
+                cookiesToSet.forEach(({ name, value }) =>
+                    request.cookies.set(name, value)
+                );
                 supabaseResponse = NextResponse.next({ request });
-
-                cookiesToSet.forEach(({ name, value, options }) => {
-                    return supabaseResponse.cookies.set(name, value, options);
-                });
+                cookiesToSet.forEach(({ name, value, options }) =>
+                    supabaseResponse.cookies.set(name, value, options)
+                );
             },
         },
     });
@@ -33,10 +31,6 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser();
 
-    /**
-     * Kalau tidak ada data user di dalam cookie, dan url bukan /login
-     * Maka arahkan paksa ke /login
-     */
     if (!user && request.nextUrl.pathname !== "/login") {
         const url = request.nextUrl.clone();
         url.pathname = "/login";
@@ -48,4 +42,6 @@ export async function updateSession(request: NextRequest) {
         url.pathname = "/";
         return NextResponse.redirect(url);
     }
+
+    return supabaseResponse;
 }
