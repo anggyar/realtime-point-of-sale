@@ -7,6 +7,8 @@ export default function Home() {
         <div>
             <Input />
             <Button className="dark:bg-teal-500 bg-amber-600">Submit</Button>
+
+            {/* TOGGLE DARKMODE */}
             <DarkModeToggle />
         </div>
     );
