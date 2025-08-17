@@ -16,6 +16,7 @@ import { LoginForm, loginSchema } from "../../../../../validations/auth-validati
 import { zodResolver } from "@hookform/resolvers/zod";
 import { INITIAL_LOGIN_FORM } from "@/constants/auth-constant";
 import { Button } from "@/components/ui/button";
+import FormInput from "@/components/common/input-form";
 
 const Login = () => {
   const form = useForm<LoginForm>({
@@ -36,37 +37,22 @@ const Login = () => {
       <CardContent>
         <Form {...form}>
           <form className="space-y-4" onSubmit={onSubmit}>
-            <FormField
-              control={form.control}
+            <FormInput
+              form={form}
               name="email"
-              render={({ field: { ...rest } }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...rest}
-                      type="email"
-                      placeholder="Insert your email"
-                      autoComplete="off"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
+              label="Email"
+              placeholder="Insert your email here"
+              type="email"
             />
-            <FormField
-              control={form.control}
+
+            <FormInput
+              form={form}
               name="password"
-              render={({ field: { ...rest } }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input {...rest} type="password" placeholder="********" autoComplete="off" />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
+              label="Password"
+              placeholder="******"
+              type="password"
             />
+
             <Button type="submit" className="">
               Login
             </Button>
