@@ -13,6 +13,7 @@ import FormInput from "@/components/common/input-form";
 import { login } from "../actions";
 import { Loader2 } from "lucide-react";
 import { LoginForm, loginSchemaForm } from "@/validations/auth-validation";
+import { toast } from "sonner";
 
 const Login = () => {
   const form = useForm<LoginForm>({
@@ -36,6 +37,9 @@ const Login = () => {
 
   useEffect(() => {
     if (loginState.status === "error") {
+      toast.error("Login Failed", {
+        description: loginState.errors?._form?.[0],
+      });
       startTransition(() => {
         loginAction(null);
       });
