@@ -1,5 +1,9 @@
 import React from "react";
+import UserManagement from "./_components/user";
 
+export const metadata = {
+  title: "Jadi Ria | User Management",
+};
 export default function UserManagementPage() {
-  return <div>UserManagementPage</div>;
+  return <UserManagement />;
 }
