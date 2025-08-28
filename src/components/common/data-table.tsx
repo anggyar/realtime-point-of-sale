@@ -1,25 +1,46 @@
 import { ReactNode } from "react";
 import { Card } from "../ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import { Loader2Icon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+
+import PaginationDataTable from "./pagination-data-table";
 
 export default function DataTable({
   header,
   data,
   isLoading,
+  totalPages,
+  currentPage,
+  currentLimit,
+  onChangePage,
+  onChangeLimit,
 }: {
   header: string[];
   data: (string | ReactNode)[][];
   isLoading?: boolean;
+  totalPages: number;
+  currentPage: number;
+  currentLimit: number;
+  onChangePage: (page: number) => void;
+  onChangeLimit: (limit: number) => void;
 }) {
   return (
-    <div className="w-full flex flex-col gap-4">
-      <Card className="p-0">
-        <Table className="w-full rounded-lg overflow-hidden">
-          <TableHeader className="bg-muted sticky top-0 z-10">
+    <div className='w-full flex flex-col gap-4'>
+      <Card className='p-0'>
+        <Table className='w-full rounded-lg overflow-hidden'>
+          <TableHeader className='bg-muted sticky top-0 z-10'>
             <TableRow>
               {header.map((column) => (
-                <TableHead key={`th-${column}`} className="px-6 py-3">
+                <TableHead
+                  key={`th-${column}`}
+                  className='px-6 py-3'
+                >
                   {column}
                 </TableHead>
               ))}
@@ -29,7 +50,10 @@ export default function DataTable({
             {data?.map((row, rowIndex) => (
               <TableRow key={`tr-${rowIndex}`}>
                 {row.map((column, columnIndex) => (
-                  <TableCell className="px-6 py-3" key={`tc-${rowIndex}-${columnIndex}`}>
+                  <TableCell
+                    className='px-6 py-3'
+                    key={`tc-${rowIndex}-${columnIndex}`}
+                  >
                     {column}
                   </TableCell>
                 ))}
@@ -39,7 +63,10 @@ export default function DataTable({
             {/* KALAU TIDAK ADA DATA */}
             {data?.length === 0 && !isLoading && (
               <TableRow>
-                <TableCell colSpan={header.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={header.length}
+                  className='h-24 text-center'
+                >
                   No Result Data
                 </TableCell>
               </TableRow>
@@ -48,7 +75,10 @@ export default function DataTable({
             {/* Kalau lagi loading */}
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={header.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={header.length}
+                  className='h-24 text-center'
+                >
                   Loading ...
                 </TableCell>
               </TableRow>
@@ -56,6 +86,19 @@ export default function DataTable({
           </TableBody>
         </Table>
       </Card>
+      <div className='flex items-center justify-between'>
+        <div></div>
+
+        {totalPages > 1 && (
+          <div className='flex justify-end'>
+            <PaginationDataTable
+              currentPage={currentPage}
+              onChangePage={onChangePage}
+              totalPages={totalPages}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
