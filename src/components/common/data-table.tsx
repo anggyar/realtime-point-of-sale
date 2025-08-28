@@ -10,6 +10,16 @@ import {
 } from "../ui/table";
 
 import PaginationDataTable from "./pagination-data-table";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "../ui/select";
+import { SelectGroup, SelectValue } from "@radix-ui/react-select";
+import { LIMIT_LISTS } from "@/constants/data-table-constan";
 
 export default function DataTable({
   header,
@@ -87,7 +97,31 @@ export default function DataTable({
         </Table>
       </Card>
       <div className='flex items-center justify-between'>
-        <div></div>
+        <div className='flex items-center gap-2'>
+          {/* SELECT SECTION */}
+          <Label>Limit</Label>
+          <Select
+            value={currentLimit.toString()}
+            onValueChange={(value) => onChangeLimit(Number(value))}
+          >
+            <SelectTrigger value={currentLimit.toString()}>
+              <SelectValue placeholder='Select Limit' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Select Limit</SelectLabel>
+                {LIMIT_LISTS.map((limit) => (
+                  <SelectItem
+                    key={limit}
+                    value={limit.toString()}
+                  >
+                    {limit}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
 
         {totalPages > 1 && (
           <div className='flex justify-end'>
