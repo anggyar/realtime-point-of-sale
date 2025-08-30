@@ -1,3 +1,5 @@
+import { email } from "zod";
+
 export const INITIAL_LOGIN_FORM = {
   email: "",
   password: "",
@@ -17,4 +19,24 @@ export const INITIAL_STATE_PROFILE = {
   name: "",
   avatar_url: "",
   role: "",
+};
+
+export const INITIAL_CREATE_USER_FORM = {
+  name: "",
+  role: "",
+  avatar_url: "",
+  email: "",
+  password: "",
+};
+
+export const INITIAL_STATE_CREATE_USER = {
+  status: "idle",
+  errors: {
+    email: [],
+    password: [],
+    name: [],
+    role: [],
+    avatar_url: [],
+    _form: [],
+  },
 };
