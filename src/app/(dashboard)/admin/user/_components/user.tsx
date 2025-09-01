@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import DialogCreateUser from "./dialog-create-user";
 import { Profile } from "@/types/auth";
 import DialogUpdateUser from "./dialog-update-user";
+import DialogDeleteUser from "./dialog-delete-user";
 
 export default function UserManagement() {
   const supabase = createClient();
@@ -65,7 +66,7 @@ export default function UserManagement() {
   const filteredData = useMemo(() => {
     return (users?.data || []).map((user, index) => {
       return [
-        index + 1,
+        currentLimit * (currentPage - 1) + index + 1,
         user.id,
         user.name,
         user.role,
@@ -92,8 +93,13 @@ export default function UserManagement() {
                   Delete
                 </span>
               ),
-              action: () => {},
               variant: "destructive",
+              action: () => {
+                setSelectedActions({
+                  data: user,
+                  type: "delete",
+                });
+              },
             },
           ]}
         />,
@@ -132,9 +138,15 @@ export default function UserManagement() {
         onChangePage={handleChangePage}
         onChangeLimit={handleChangeLimit}
       />
-      {isLoading && <Loader2Icon className='animate-spin' />}
       <DialogUpdateUser
         open={selectedActions !== null && selectedActions.type === "update"}
+        refetch={refetch}
+        currentData={selectedActions?.data}
+        handleChangeAction={handleChangeAction}
+      />
+
+      <DialogDeleteUser
+        open={selectedActions !== null && selectedActions.type === "delete"}
         refetch={refetch}
         currentData={selectedActions?.data}
         handleChangeAction={handleChangeAction}
