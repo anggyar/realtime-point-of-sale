@@ -9,9 +9,11 @@ import useDataTable from "@/hooks/use-data-table";
 import { createClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2Icon, Pencil, Trash2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import DialogCreateUser from "./dialog-create-user";
+import { Profile } from "@/types/auth";
+import DialogUpdateUser from "./dialog-update-user";
 
 export default function UserManagement() {
   const supabase = createClient();
@@ -49,6 +51,17 @@ export default function UserManagement() {
     },
   });
 
+  const [selectedActions, setSelectedActions] = useState<{
+    type: "update" | "delete";
+    data: Profile;
+  } | null>(null);
+
+  const handleChangeAction = (open: boolean) => {
+    if (!open) {
+      setSelectedActions(null);
+    }
+  };
+
   const filteredData = useMemo(() => {
     return (users?.data || []).map((user, index) => {
       return [
@@ -65,7 +78,12 @@ export default function UserManagement() {
                   Edit
                 </span>
               ),
-              action: () => {},
+              action: () => {
+                setSelectedActions({
+                  data: user,
+                  type: "update",
+                });
+              },
             },
             {
               label: (
@@ -115,6 +133,12 @@ export default function UserManagement() {
         onChangeLimit={handleChangeLimit}
       />
       {isLoading && <Loader2Icon className='animate-spin' />}
+      <DialogUpdateUser
+        open={selectedActions !== null && selectedActions.type === "update"}
+        refetch={refetch}
+        currentData={selectedActions?.data}
+        handleChangeAction={handleChangeAction}
+      />
     </div>
   );
 }
