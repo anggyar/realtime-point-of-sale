@@ -14,7 +14,7 @@ export const SIDEBAR_MENU_LIST = {
     },
     {
       title: "Menu",
-      url: "/menu",
+      url: "/admin/menu",
       icon: SquareMenu,
     },
     {
