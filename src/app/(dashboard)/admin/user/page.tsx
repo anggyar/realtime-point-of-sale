@@ -1,5 +1,5 @@
 import React from "react";
-import UserManagement from "./_components/user";
+import UserManagement from "./user";
 
 export const metadata = {
   title: "Jadi Ria | User Management",
