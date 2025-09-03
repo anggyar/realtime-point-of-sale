@@ -77,6 +77,7 @@ export async function createUser(prevState: AuthFormState, formData: FormData) {
     status: "success",
   };
 }
+
 export async function updateUser(prevState: AuthFormState, formData: FormData) {
   let validateFields = updateUserSchema.safeParse({
     name: formData.get("name"),
