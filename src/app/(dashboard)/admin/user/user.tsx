@@ -54,7 +54,7 @@ export default function UserManagement() {
     },
   });
 
-  const [selectedActions, setSelectedActions] = useState<{
+  const [selectedAction, setSelectedActions] = useState<{
     type: "update" | "delete";
     data: Profile;
   } | null>(null);
@@ -141,16 +141,16 @@ export default function UserManagement() {
         onChangeLimit={handleChangeLimit}
       />
       <DialogUpdateUser
-        open={selectedActions !== null && selectedActions.type === "update"}
+        open={selectedAction !== null && selectedAction.type === "update"}
         refetch={refetch}
-        currentData={selectedActions?.data}
+        currentData={selectedAction?.data}
         handleChangeAction={handleChangeAction}
       />
 
       <DialogDeleteUser
-        open={selectedActions !== null && selectedActions.type === "delete"}
+        open={selectedAction !== null && selectedAction.type === "delete"}
         refetch={refetch}
-        currentData={selectedActions?.data}
+        currentData={selectedAction?.data}
         handleChangeAction={handleChangeAction}
       />
     </div>
