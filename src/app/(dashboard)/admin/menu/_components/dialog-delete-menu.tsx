@@ -1,48 +1,49 @@
 import DialogDelete from "@/components/common/dialog-delete";
 import { Profile } from "@/types/auth";
 import { startTransition, useActionState, useEffect } from "react";
-import { deleteUser } from "../actions";
+import { deleteMenu } from "../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { toast } from "sonner";
+import { Menu } from "@/validations/menu-validation";
 
-export default function DialogDeleteUser({
+export default function DialogDeleteMenu({
   open,
   refetch,
   currentData,
   handleChangeAction,
 }: {
   refetch: () => void;
-  currentData?: Profile;
+  currentData?: Menu;
   open: boolean;
   handleChangeAction: (open: boolean) => void;
 }) {
-  const [deleteUserState, deleteUserAction, isPendingDeleteUser] = useActionState(
-    deleteUser,
+  const [deleteMenuState, deleteMenuAction, isPendingDeleteMenu] = useActionState(
+    deleteMenu,
     INITIAL_STATE_ACTION
   );
 
   const onSubmit = () => {
     const formData = new FormData();
     formData.append("id", currentData!.id as string);
-    formData.append("avatar_url", currentData?.avatar_url as string);
+    formData.append("image_url", currentData?.image_url as string);
     startTransition(() => {
-      deleteUserAction(formData);
+      deleteMenuAction(formData);
     });
   };
 
   useEffect(() => {
-    if (deleteUserState?.status === "error") {
-      toast.error("Delete User Failed", {
-        description: deleteUserState.errors?._form?.[0],
+    if (deleteMenuState?.status === "error") {
+      toast.error("Delete Menu Failed", {
+        description: deleteMenuState.errors?._form?.[0],
       });
     }
 
-    if (deleteUserState?.status === "success") {
-      toast.success("Delete User Success");
+    if (deleteMenuState?.status === "success") {
+      toast.success("Delete Menu Success");
       handleChangeAction?.(false);
       refetch();
     }
-  }, [deleteUserState]);
+  }, [deleteMenuState]);
 
   return (
     <DialogDelete
@@ -50,7 +51,7 @@ export default function DialogDeleteUser({
       open={open}
       onOpenChange={handleChangeAction}
       onSubmit={onSubmit}
-      isLoading={isPendingDeleteUser}
+      isLoading={isPendingDeleteMenu}
     />
   );
 }
