@@ -64,3 +64,17 @@ export const INITIAL_STATE_CREATE_MENU = {
     _form: [],
   },
 };
+
+export const INITIAL_STATE_UPDATE_MENU = {
+  status: "idle",
+  errors: {
+    name: [],
+    description: [],
+    price: [],
+    discount: [],
+    category: [],
+    image_url: [],
+    is_available: [],
+    _form: [],
+  },
+};
