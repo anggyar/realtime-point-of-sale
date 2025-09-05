@@ -50,15 +50,12 @@ export async function createTable(prevState: TableFormState, formData: FormData)
   };
 }
 
-export async function updateMenu(prevState: MenuFormState, formData: FormData) {
-  let validateFields = menuSchema.safeParse({
+export async function updateTable(prevState: TableFormState, formData: FormData) {
+  const validateFields = tableSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
-    price: parseFloat(formData.get("price") as string),
-    discount: parseFloat(formData.get("discount") as string),
-    category: formData.get("category"),
-    image_url: formData.get("image_url"),
-    is_available: formData.get("is_available") === "true" ? true : false,
+    capacity: parseFloat(formData.get("capacity") as string),
+    status: formData.get("status"),
   });
 
   if (!validateFields.success) {
@@ -71,46 +68,15 @@ export async function updateMenu(prevState: MenuFormState, formData: FormData) {
     };
   }
 
-  if (validateFields.data.image_url instanceof File) {
-    const oldImageUrl = formData.get("old_image_url") as string;
-    const { errors, data } = await uploadFile(
-      "images",
-      "menus",
-      validateFields.data.image_url,
-      oldImageUrl.split("/images/")[1]
-    );
-
-    if (errors) {
-      return {
-        status: "error",
-        errors: {
-          ...prevState.errors,
-          _form: [...errors._form],
-        },
-      };
-    }
-
-    validateFields = {
-      ...validateFields,
-      data: {
-        ...validateFields.data,
-        image_url: data.url,
-      },
-    };
-  }
-
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from("menus")
+    .from("tables")
     .update({
       name: validateFields.data.name,
       description: validateFields.data.description,
-      price: validateFields.data.price,
-      discount: validateFields.data.discount,
-      category: validateFields.data.category,
-      image_url: validateFields.data.image_url,
-      is_available: validateFields.data.is_available,
+      capacity: validateFields.data.capacity,
+      status: validateFields.data.status,
     })
     .eq("id", formData.get("id"));
 
