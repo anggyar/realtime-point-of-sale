@@ -32,3 +32,14 @@ export const STATUS_TABLE_LIST = [
     label: "Reserved",
   },
 ];
+
+export const INITIAL_STATE_UPDATE_TABLE = {
+  status: "idle",
+  errors: {
+    name: [],
+    description: [],
+    capacity: [],
+    status: [],
+    _form: [],
+  },
+};
