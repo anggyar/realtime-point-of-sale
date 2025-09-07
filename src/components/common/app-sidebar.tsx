@@ -24,7 +24,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { SIDEBAR_MENU_LIST, SidebarMenuKey } from "@/constants/sidebar-constant";
+import {
+  SIDEBAR_MENU_LIST,
+  SidebarMenuKey,
+} from "@/constants/sidebar-constant";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import SignOut from "@/actions/auth-actions";
@@ -46,7 +49,7 @@ export default function AppSidebar() {
             >
               <div className='font-semibold'>
                 <div className='bg-primary font-medium p-2 justify-center rounded-md'>
-                  <Soup className='size-4' />
+                  <Soup className='size-4 text-primary-foreground' />
                 </div>
                 Jadi Ria
               </div>
@@ -59,25 +62,27 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent className='flex flex-col gap-2'>
             <SidebarMenu>
-              {SIDEBAR_MENU_LIST[profile.role as SidebarMenuKey]?.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                  >
-                    <a
-                      href={item.url}
-                      className={cn("px-4 py3 h-auto", {
-                        "bg-sidebar-primary text-white hover:bg-sidebar-primary-foreground hover:text-white":
-                          pathname === item.url,
-                      })}
+              {SIDEBAR_MENU_LIST[profile.role as SidebarMenuKey]?.map(
+                (item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.title}
                     >
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                      <a
+                        href={item.url}
+                        className={cn("px-4 py3 h-auto", {
+                          "bg-sidebar-foreground text-sidebar hover:bg-sidebar-accent hover:text-accent-foreground":
+                            pathname === item.url,
+                        })}
+                      >
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
