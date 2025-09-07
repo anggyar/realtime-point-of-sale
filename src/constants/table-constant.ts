@@ -1,4 +1,10 @@
-export const HEADER_TABLE_TABLES = ["No", "Name", "Capacity", "Status", "Action"];
+export const HEADER_TABLE_TABLES = [
+  "No",
+  "Name",
+  "Capacity",
+  "Status",
+  "Action",
+];
 
 export const INITIAL_CREATE_TABLE_FORM = {
   name: "",
