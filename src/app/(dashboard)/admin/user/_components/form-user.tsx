@@ -93,7 +93,7 @@ export default function FormUser<T extends FieldValues>({
             </DialogClose>
             <Button
               type='submit'
-              className=''
+              className='text-white'
             >
               {isLoading ? <Loader2 className='animate-spin' /> : type}
             </Button>
