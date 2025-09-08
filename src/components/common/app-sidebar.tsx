@@ -48,8 +48,8 @@ export default function AppSidebar() {
               asChild
             >
               <div className='font-semibold'>
-                <div className='bg-primary font-medium p-2 justify-center rounded-md'>
-                  <Soup className='size-4 text-primary-foreground' />
+                <div className='bg-primary font-medium p-2 justify-center rounded-md text-primary-foreground'>
+                  <Soup className='size-4' />
                 </div>
                 Jadi Ria
               </div>
