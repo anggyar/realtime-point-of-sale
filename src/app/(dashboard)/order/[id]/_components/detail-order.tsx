@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import Image from "next/image";
 import { cn, convertIDR } from "@/lib/utils";
+import Summary from "./summary";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClient();
@@ -26,11 +27,7 @@ export default function DetailOrder({ id }: { id: string }) {
     queryFn: async () => {
       const result = await supabase
         .from("orders")
-        .select(
-          `
-            id, customer_name, status, payment_url, tables (name, id)
-          `
-        )
+        .select("id, customer_name, status, payment_url, tables (name, id)")
         .eq("order_id", id)
         .single();
 
@@ -48,7 +45,7 @@ export default function DetailOrder({ id }: { id: string }) {
     queryKey: ["orders_menu", order?.id, currentPage, currentLimit],
     queryFn: async () => {
       const result = await supabase
-        .from("orders_menu")
+        .from("orders_menus")
         .select("*, menus (id, name, image_url, price)", { count: "exact" })
         .eq("order_id", order?.id)
         .order("status");
@@ -123,6 +120,16 @@ export default function DetailOrder({ id }: { id: string }) {
             onChangePage={handleChangePage}
             onChangeLimit={handleChangeLimit}
           />
+        </div>
+
+        <div className='lg:w-1/3'>
+          {order && (
+            <Summary
+              order={order}
+              orderMenu={orderMenu?.data}
+              id={id}
+            />
+          )}
         </div>
       </div>
     </div>
