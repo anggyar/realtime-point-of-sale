@@ -9,23 +9,23 @@ export const HEADER_TABLE_MENU = [
 
 export const CATEGORY_LIST = [
   {
-    value: "makanan_utama",
+    value: "Makanan Utama",
     label: "Makanan Utama",
   },
   {
-    value: "cemilan",
+    value: "Cemilan",
     label: "Cemilan",
   },
   {
-    value: "minuman_kopi",
+    value: "Minuman Kopi",
     label: "Minuman Kopi",
   },
   {
-    value: "minuman_non_kopi",
+    value: "Minuman Non Kopi",
     label: "Minuman Non-Kopi",
   },
   {
-    value: "dessert",
+    value: "Dessert",
     label: "Dessert",
   },
 ];
