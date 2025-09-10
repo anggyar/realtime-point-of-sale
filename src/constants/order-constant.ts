@@ -48,19 +48,23 @@ export const FILTER_MENU = [
     label: "All",
   },
   {
-    value: "mains",
-    label: "Mains",
+    value: "Makanan Utama",
+    label: "Makanan Utama",
   },
   {
-    value: "sides",
-    label: "Sides",
+    value: "Dessert",
+    label: "Dessert",
   },
   {
-    value: "desserts",
-    label: "Desserts",
+    value: "Minuman Kopi",
+    label: "Minuman Kopi",
   },
   {
-    value: "beverages",
-    label: "Beverages",
+    value: "Cemilan",
+    label: "Cemilan",
+  },
+  {
+    value: "Minuman Non-Kopi",
+    label: "Minuman Non-Kopi",
   },
 ];
