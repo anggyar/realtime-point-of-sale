@@ -3,12 +3,16 @@
 import { createClient } from "@/lib/supabase/server";
 import { FormState } from "@/types/general";
 
-import { OrderFormState } from "@/types/order";
+import { Cart, OrderFormState } from "@/types/order";
 import { TableFormState } from "@/types/table";
 import { createOrderSchema, orderSchema } from "@/validations/order-validation";
 import { tableSchema } from "@/validations/table-validation";
+import { redirect } from "next/navigation";
 
-export async function createOrder(prevState: OrderFormState, formData: FormData) {
+export async function createOrder(
+  prevState: OrderFormState,
+  formData: FormData
+) {
   const validateFields = createOrderSchema.safeParse({
     customer_name: formData.get("customer_name"),
     status: formData.get("status"),
@@ -40,7 +44,10 @@ export async function createOrder(prevState: OrderFormState, formData: FormData)
     supabase
       .from("tables")
       .update({
-        status: validateFields.data.status === "reserved" ? "reserved" : "unavailable",
+        status:
+          validateFields.data.status === "reserved"
+            ? "reserved"
+            : "unavailable",
       })
       .eq("id", validateFields.data.table_id),
   ]);
@@ -66,7 +73,10 @@ export async function createOrder(prevState: OrderFormState, formData: FormData)
   };
 }
 
-export async function updateReservation(prevState: FormState, formData: FormData) {
+export async function updateReservation(
+  prevState: FormState,
+  formData: FormData
+) {
   const supabase = await createClient();
 
   const [orderResult, tableResult] = await Promise.all([
@@ -80,7 +90,8 @@ export async function updateReservation(prevState: FormState, formData: FormData
     supabase
       .from("tables")
       .update({
-        status: formData.get("status") === "process" ? "unavailable" : "available",
+        status:
+          formData.get("status") === "process" ? "unavailable" : "available",
       })
       .eq("id", formData.get("table_id")),
   ]);
@@ -106,7 +117,10 @@ export async function updateReservation(prevState: FormState, formData: FormData
   };
 }
 
-export async function updateTable(prevState: TableFormState, formData: FormData) {
+export async function updateTable(
+  prevState: TableFormState,
+  formData: FormData
+) {
   const validateFields = tableSchema.safeParse({
     name: formData.get("name"),
     description: formData.get("description"),
@@ -151,10 +165,16 @@ export async function updateTable(prevState: TableFormState, formData: FormData)
   };
 }
 
-export async function deleteTable(prevState: TableFormState, formData: FormData) {
+export async function deleteTable(
+  prevState: TableFormState,
+  formData: FormData
+) {
   const supabase = await createClient();
 
-  const { error } = await supabase.from("tables").delete().eq("id", formData.get("id"));
+  const { error } = await supabase
+    .from("tables")
+    .delete()
+    .eq("id", formData.get("id"));
 
   if (error) {
     return {
@@ -169,4 +189,30 @@ export async function deleteTable(prevState: TableFormState, formData: FormData)
   return {
     status: "success",
   };
+}
+
+export async function addOrderItem(
+  prevState: OrderFormState,
+  data: {
+    order_id: string;
+    items: Cart[];
+  }
+) {
+  const supabase = await createClient();
+
+  const payload = data.items.map(({ total, menu, ...item }) => item);
+
+  const { error } = await supabase.from("orders_menus").insert(payload);
+
+  if (error) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState,
+        _form: [],
+      },
+    };
+  }
+
+  redirect(`/order/${data.order_id}`);
 }

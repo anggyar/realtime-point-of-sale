@@ -5,7 +5,7 @@ export const metadata = {
   title: "Jadi Ria | Detail Order",
 };
 
-export default async function DetailOrderPage({
+export default async function AddOrderItemPage({
   params,
 }: {
   params: Promise<{ id: string }>;

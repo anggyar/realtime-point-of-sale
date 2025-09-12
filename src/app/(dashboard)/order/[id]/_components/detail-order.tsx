@@ -74,7 +74,7 @@ export default function DetailOrder({ id }: { id: string }) {
           />
         </div>,
         <div className='flex flex-col'>
-          {item.menus.name} x {item.quantitiy}
+          {item.menus.name} x {item.quantity}
           <span className='text-xs text-muted-foreground'>
             {item.notes || "No notes"}
           </span>

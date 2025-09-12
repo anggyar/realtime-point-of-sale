@@ -8,13 +8,18 @@ import { convertIDR } from "@/lib/utils";
 import { Cart } from "@/types/order";
 import { Menu } from "@/validations/menu-validation";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useActionState } from "react";
+import { addOrderItem } from "../../../actions";
+import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
+import { Loader2 } from "lucide-react";
 
 export default function CartSection({
   order,
   carts,
   setCarts,
   onAddToCart,
+  isLoading,
+  onOrder,
 }: {
   order:
     | {
@@ -30,13 +35,15 @@ export default function CartSection({
   carts: Cart[];
   setCarts: Dispatch<SetStateAction<Cart[]>>;
   onAddToCart: (item: Menu, type: "decrement" | "increment") => void;
+  isLoading: boolean;
+  onOrder: () => void;
 }) {
   // Logic
   const debounce = useDebounce();
 
-  const handleAddNote = (id: string, note: string) => {
+  const handleAddNote = (id: string, notes: string) => {
     setCarts(
-      carts.map((item) => (item.menu_id === id ? { ...item, note } : item))
+      carts.map((item) => (item.menu_id === id ? { ...item, notes } : item))
     );
   };
 
@@ -125,6 +132,14 @@ export default function CartSection({
           ) : (
             <p className='text-sm'>No item in cart</p>
           )}
+          <form>
+            <Button
+              onClick={() => onOrder()}
+              className='w-full font-semibold bg-teal-500 hover:bg-teal-600 cursor-pointer text-white'
+            >
+              {isLoading ? <Loader2 className='animate-spin' /> : "Order"}
+            </Button>
+          </form>
         </div>
       </CardContent>
     </Card>
