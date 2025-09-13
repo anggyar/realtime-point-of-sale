@@ -1,0 +1,21 @@
+INSERT INTO public.tables (name, description, capacity, status)
+VALUES
+('LT1-002', 'Lantai 1 - Meja 2', 4, 'available'),
+('LT1-003', 'Lantai 1 - Meja 3', 4, 'available'),
+('LT1-004', 'Lantai 1 - Meja 4', 4, 'available'),
+('LT1-005', 'Lantai 1 - Meja 5', 4, 'available'),
+('LT1-006', 'Lantai 1 - Meja 6', 4, 'available'),
+('LT1-007', 'Lantai 1 - Meja 7', 4, 'available'),
+('LT1-008', 'Lantai 1 - Meja 8', 4, 'available'),
+('LT1-009', 'Lantai 1 - Meja 9', 4, 'available'),
+('LT1-010', 'Lantai 1 - Meja 10', 4, 'available'),
+('LT2-001', 'Lantai 2 - Meja 1', 7, 'available'),
+('LT2-002', 'Lantai 2 - Meja 2', 7, 'available'),
+('LT2-003', 'Lantai 2 - Meja 3', 7, 'available'),
+('LT2-004', 'Lantai 2 - Meja 4', 7, 'available'),
+('LT2-005', 'Lantai 2 - Meja 5', 7, 'available'),
+('LT2-006', 'Lantai 2 - Meja 6', 7, 'available'),
+('LT2-007', 'Lantai 2 - Meja 7', 7, 'available'),
+('LT2-008', 'Lantai 2 - Meja 8', 4, 'available'),
+('LT2-009', 'Lantai 2 - Meja 9', 4, 'available'),
+('LT2-010', 'Lantai 2 - Meja 10', 4, 'available');
