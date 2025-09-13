@@ -132,14 +132,13 @@ export default function CartSection({
           ) : (
             <p className='text-sm'>No item in cart</p>
           )}
-          <form>
-            <Button
-              onClick={() => onOrder()}
-              className='w-full font-semibold bg-teal-500 hover:bg-teal-600 cursor-pointer text-white'
-            >
-              {isLoading ? <Loader2 className='animate-spin' /> : "Order"}
-            </Button>
-          </form>
+
+          <Button
+            onClick={() => onOrder()}
+            className='w-full font-semibold bg-teal-500 hover:bg-teal-600 cursor-pointer text-white'
+          >
+            {isLoading ? <Loader2 className='animate-spin' /> : "Order"}
+          </Button>
         </div>
       </CardContent>
     </Card>
