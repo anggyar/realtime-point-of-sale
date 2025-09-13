@@ -36,7 +36,9 @@ export default function FormMenu<T extends FieldValues>({
   return (
     <DialogContent className='sm:max-w-[425px] max-h-[90vh]'>
       <DialogHeader>
-        <DialogTitle className='items-center font-bold text-2xl'>{type} Menu</DialogTitle>
+        <DialogTitle className='items-center font-bold text-2xl'>
+          {type} Menu
+        </DialogTitle>
         <DialogDescription className='font-semibold'>
           {type === "Create" ? "Add a new menu" : "Make changes menu here"}
         </DialogDescription>
