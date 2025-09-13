@@ -9,7 +9,13 @@ import useDataTable from "@/hooks/use-data-table";
 import { createClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
-import { startTransition, useActionState, useEffect, useMemo, useState } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Table } from "@/validations/table-validation";
@@ -19,7 +25,6 @@ import DialogCreateOrder from "./dialog-create-order";
 import { updateReservation } from "../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { BanIcon, Link2Icon, ScrollText, ScrollTextIcon } from "lucide-react";
-import { unknown } from "zod";
 import Link from "next/link";
 
 export default function OrderManagement() {
@@ -95,7 +100,9 @@ export default function OrderManagement() {
 
   /* --------- CHECK TOTAL PAGES BASED ON HOW MANY ORDER LISTS CREATED -------- */
   const totalPages = useMemo(() => {
-    return orders && orders.count !== null ? Math.ceil(orders.count / currentLimit) : 0;
+    return orders && orders.count !== null
+      ? Math.ceil(orders.count / currentLimit)
+      : 0;
   }, [orders]);
 
   /* --------------------------- HANDLE RESERVATION --------------------------- */
@@ -187,7 +194,10 @@ export default function OrderManagement() {
               ? reservedActionList.map((item) => ({
                   label: item.label,
                   action: () =>
-                    item.action(order.id, (order.tables as unknown as { id: string }).id),
+                    item.action(
+                      order.id,
+                      (order.tables as unknown as { id: string }).id
+                    ),
                 }))
               : [
                   {
