@@ -209,10 +209,40 @@ export async function addOrderItem(
       status: "error",
       errors: {
         ...prevState,
+        // Dibawah bisa pesan errornya dikosongin kalau error
+
         _form: [],
       },
     };
   }
 
   redirect(`/order/${data.order_id}`);
+}
+
+export async function updateStatusOrderItem(
+  prevState: FormState,
+  formData: FormData
+) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("orders_menus")
+    .update({
+      status: formData.get("status"),
+    })
+    .eq("id", formData.get("id"));
+
+  if (error) {
+    return {
+      status: "error",
+      errors: {
+        ...prevState.errors,
+        _form: [],
+      },
+    };
+  }
+
+  return {
+    status: "Success",
+  };
 }
