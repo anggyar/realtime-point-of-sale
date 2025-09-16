@@ -5,6 +5,12 @@ import { Separator } from "@/components/ui/separator";
 import { usePricing } from "@/hooks/use-pricing";
 import { convertIDR } from "@/lib/utils";
 import { Menu } from "@/validations/menu-validation";
+import { startTransition, useActionState, useEffect, useMemo } from "react";
+import { generatePayment } from "../../actions";
+import { INITIAL_STATE_GENERATE_PAYMENT } from "@/constants/order-constant";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export default function Summary({
   order,
@@ -25,6 +31,38 @@ export default function Summary({
   id: string;
 }) {
   const { grandTotal, service, totalPrice, tax } = usePricing(orderMenu);
+
+  const isAllServed = useMemo(() => {
+    return orderMenu?.every((item) => item.status === "served");
+  }, [orderMenu]);
+
+  const [
+    generatePaymentState,
+    generatePaymentAction,
+    isPendingGeneratePayment,
+  ] = useActionState(generatePayment, INITIAL_STATE_GENERATE_PAYMENT);
+
+  const handleGeneratePayment = () => {
+    const formData = new FormData();
+    formData.append("id", id || "");
+    formData.append("gross_amount", grandTotal.toString());
+    formData.append("customer_name", order.customer_name || "");
+    startTransition(() => {
+      generatePaymentAction(formData);
+    });
+  };
+
+  useEffect(() => {
+    if (generatePaymentState?.status === "error") {
+      toast.error("Generate Payment Failed", {
+        description: generatePaymentState.errors?._form?.[0],
+      });
+    }
+
+    if (generatePaymentState?.status === "success") {
+      window.snap.pay(generatePaymentState.data.payment_token);
+    }
+  }, [generatePaymentState]);
   return (
     <Card className='w-full shadow-sm'>
       <CardContent className=' space-y-4'>
@@ -72,6 +110,20 @@ export default function Summary({
             <p className='text-sm'>Service (5%)</p>
             <p className='text-sm'>{convertIDR(grandTotal)}</p>
           </div>
+          {order?.status === "process" && (
+            <Button
+              type='submit'
+              onClick={handleGeneratePayment}
+              disabled={!isAllServed || isPendingGeneratePayment}
+              className='w-full font-semibold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer'
+            >
+              {isPendingGeneratePayment ? (
+                <Loader2 className='animate-spin' />
+              ) : (
+                "Pay"
+              )}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
