@@ -7,6 +7,12 @@ export const metadata = {
   title: "Jadi Ria | Detail Order",
 };
 
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
+
 export default async function DetailOrderPage({
   params,
 }: {
