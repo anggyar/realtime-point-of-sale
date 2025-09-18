@@ -4,7 +4,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Table } from "@/validations/table-validation";
 
-import { createOrderForm, createOrderSchema } from "@/validations/order-validation";
+import {
+  createOrderForm,
+  createOrderSchema,
+} from "@/validations/order-validation";
 import {
   INITIAL_CREATE_ORDER_FORM,
   STATUS_CREATE_ORDER,
@@ -25,10 +28,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 export default function DialogCreateOrder({
-  refetch,
   tables,
 }: {
-  refetch: () => void;
   tables: Table[] | undefined | null;
 }) {
   const form = useForm<createOrderForm>({
@@ -36,10 +37,8 @@ export default function DialogCreateOrder({
     defaultValues: INITIAL_CREATE_ORDER_FORM,
   });
 
-  const [createOrderState, createOrderAction, isPendingCreateOrder] = useActionState(
-    createOrder,
-    INITIAL_CREATE_ORDER_FORM
-  );
+  const [createOrderState, createOrderAction, isPendingCreateOrder] =
+    useActionState(createOrder, INITIAL_CREATE_ORDER_FORM);
 
   // const [preview, setPreview] = useState<Preview | undefined>(undefined);
   // FUNGSI SUBMIT
@@ -67,7 +66,6 @@ export default function DialogCreateOrder({
       form.reset();
       // setPreview(undefined);
       document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
-      refetch();
     }
   }, [createOrderState]);
   return (
@@ -119,7 +117,11 @@ export default function DialogCreateOrder({
                 type='submit'
                 className='text-white'
               >
-                {isPendingCreateOrder ? <Loader2 className='animate-spin' /> : "Create"}
+                {isPendingCreateOrder ? (
+                  <Loader2 className='animate-spin' />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </div>
