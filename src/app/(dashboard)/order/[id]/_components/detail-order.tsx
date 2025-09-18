@@ -24,6 +24,7 @@ import { EllipsisVertical } from "lucide-react";
 import { updateStatusOrderItem } from "../../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { toast } from "sonner";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClient();
@@ -54,9 +55,15 @@ export default function DetailOrder({ id }: { id: string }) {
   const {
     data: orderMenu,
     isLoading: isLoadingOrdermenu,
-    refetch: refetchOrderMenu,
+    refetch: refetchOrder,
   } = useQuery({
-    queryKey: ["orders_menu", order?.id, currentPage, currentLimit],
+    queryKey: [
+      "orders_menu",
+      order?.id,
+      currentPage,
+      currentLimit,
+      order?.status,
+    ],
     queryFn: async () => {
       const result = await supabase
         .from("orders_menus")
@@ -102,9 +109,9 @@ export default function DetailOrder({ id }: { id: string }) {
 
     if (updateStatusOrderState?.status === "success") {
       toast.success("Update Status Order Success");
-      refetchOrderMenu();
+      refetchOrder();
     }
-  }, [updateStatusOrderState]);
+  }, [updateStatusOrderState, refetchOrder]);
 
   const filteredData = useMemo(() => {
     return (orderMenu?.data || []).map((item, index) => {
@@ -186,13 +193,16 @@ export default function DetailOrder({ id }: { id: string }) {
       : 0;
   }, [orderMenu]);
 
+  const profile = useAuthStore((state) => state.profile);
   return (
     <div className='w-full space-y-4'>
       <div className='flex items-center justify-between gap-4 w-full'>
         <h1 className='text-2xl font-bold'>Detail Order</h1>
-        <Link href={`/order/${id}/add`}>
-          <Button>Add Order Item</Button>
-        </Link>
+        {profile.role !== "kitchen" && (
+          <Link href={`/order/${id}/add`}>
+            <Button>Add Order Item</Button>
+          </Link>
+        )}
       </div>
 
       <div className='flex flex-col lg:flex-row gap-4 w-full'>
