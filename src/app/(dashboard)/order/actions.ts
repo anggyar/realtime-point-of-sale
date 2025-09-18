@@ -239,7 +239,7 @@ export async function updateStatusOrderItem(
       status: "error",
       errors: {
         ...prevState.errors,
-        _form: [],
+        _form: [error.message],
       },
     };
   }
