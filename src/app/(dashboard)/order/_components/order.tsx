@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useDataTable from "@/hooks/use-data-table";
-import { createClient } from "@/lib/supabase/client";
+
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -27,9 +27,10 @@ import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { BanIcon, Link2Icon, ScrollText, ScrollTextIcon } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/auth-store";
+import { createClientSupabase } from "@/lib/supabase/default";
 
 export default function OrderManagement() {
-  const supabase = createClient();
+  const supabase = createClientSupabase();
 
   const {
     currentPage,
@@ -46,7 +47,7 @@ export default function OrderManagement() {
   const {
     data: orders,
     isLoading,
-    refetch,
+    refetch: refetchOrders,
   } = useQuery({
     queryKey: ["orders", currentPage, currentLimit, currentSearch],
     queryFn: async () => {
@@ -141,9 +142,6 @@ export default function OrderManagement() {
 
     if (reservedState?.status === "success") {
       toast.success("Update Reservation Success");
-      // setPreview(undefined);
-      document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
-      refetch();
     }
   }, [reservedState]);
 
@@ -171,6 +169,28 @@ export default function OrderManagement() {
       },
     },
   ];
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("change-order")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+        },
+        () => {
+          refetchOrders();
+          refetchTables();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   /* -------------------- FILTER DATA BASED ON ORDERS ARRAY ------------------- */
   const filteredData = useMemo(() => {
@@ -236,10 +256,7 @@ export default function OrderManagement() {
               <DialogTrigger asChild>
                 <Button variant='outline'>Create</Button>
               </DialogTrigger>
-              <DialogCreateOrder
-                tables={tables}
-                refetch={refetch}
-              />
+              <DialogCreateOrder tables={tables} />
             </Dialog>
           )}
         </div>

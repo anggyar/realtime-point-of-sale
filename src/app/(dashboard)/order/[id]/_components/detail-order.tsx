@@ -7,7 +7,7 @@ import { startTransition, useActionState, useEffect, useMemo } from "react";
 import DataTable from "@/components/common/data-table";
 import Link from "next/link";
 import { HEADER_TABLE_DETAIL_ORDER } from "@/constants/order-constant";
-import { createClient } from "@/lib/supabase/client";
+
 import useDataTable from "@/hooks/use-data-table";
 import { useQuery } from "@tanstack/react-query";
 
@@ -25,9 +25,10 @@ import { updateStatusOrderItem } from "../../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
+import { createClientSupabase } from "@/lib/supabase/default";
 
 export default function DetailOrder({ id }: { id: string }) {
-  const supabase = createClient();
+  const supabase = createClientSupabase();
 
   const { currentPage, currentLimit, handleChangePage, handleChangeLimit } =
     useDataTable();
@@ -101,6 +102,30 @@ export default function DetailOrder({ id }: { id: string }) {
   };
 
   useEffect(() => {
+    if (!order?.id) return;
+
+    const channel = supabase
+      .channel("change-order")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders_menus",
+          filter: `order_id=eq.${order.id}`,
+        },
+        () => {
+          refetchOrder();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [order?.id]);
+
+  useEffect(() => {
     if (updateStatusOrderState?.status === "error") {
       toast.error("Update Status Order Failed", {
         description: updateStatusOrderState.errors?._form?.[0],
@@ -109,9 +134,8 @@ export default function DetailOrder({ id }: { id: string }) {
 
     if (updateStatusOrderState?.status === "success") {
       toast.success("Update Status Order Success");
-      refetchOrder();
     }
-  }, [updateStatusOrderState, refetchOrder]);
+  }, [updateStatusOrderState]);
 
   const filteredData = useMemo(() => {
     return (orderMenu?.data || []).map((item, index) => {
@@ -194,6 +218,7 @@ export default function DetailOrder({ id }: { id: string }) {
   }, [orderMenu]);
 
   const profile = useAuthStore((state) => state.profile);
+
   return (
     <div className='w-full space-y-4'>
       <div className='flex items-center justify-between gap-4 w-full'>
