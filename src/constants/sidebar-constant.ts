@@ -1,4 +1,10 @@
-import { Album, Armchair, LayoutDashboard, SquareMenu, Users } from "lucide-react";
+import {
+  Album,
+  Armchair,
+  LayoutDashboard,
+  SquareMenu,
+  Users,
+} from "lucide-react";
 
 export const SIDEBAR_MENU_LIST = {
   admin: [
@@ -28,8 +34,20 @@ export const SIDEBAR_MENU_LIST = {
       icon: Users,
     },
   ],
-  cashier: [],
-  kitchen: [],
+  cashier: [
+    {
+      title: "Order",
+      url: "/order",
+      icon: Album,
+    },
+  ],
+  kitchen: [
+    {
+      title: "Order",
+      url: "/order",
+      icon: Album,
+    },
+  ],
 };
 
 export type SidebarMenuKey = keyof typeof SIDEBAR_MENU_LIST;
