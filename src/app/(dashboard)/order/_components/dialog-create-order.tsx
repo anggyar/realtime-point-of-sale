@@ -113,10 +113,7 @@ export default function DialogCreateOrder({
               <DialogClose asChild>
                 <Button variant={"outline"}>Cancel</Button>
               </DialogClose>
-              <Button
-                type='submit'
-                className='text-white'
-              >
+              <Button type='submit'>
                 {isPendingCreateOrder ? (
                   <Loader2 className='animate-spin' />
                 ) : (

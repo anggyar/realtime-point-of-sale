@@ -35,7 +35,9 @@ export default function FormUser<T extends FieldValues>({
   return (
     <DialogContent className='sm:max-w-[425px]'>
       <DialogHeader>
-        <DialogTitle className='items-center font-bold text-2xl'>{type} User</DialogTitle>
+        <DialogTitle className='items-center font-bold text-2xl'>
+          {type} User
+        </DialogTitle>
         <DialogDescription className='font-semibold'>
           {type === "Create" ? "Register a new user" : "Make changes user here"}
         </DialogDescription>
@@ -93,7 +95,7 @@ export default function FormUser<T extends FieldValues>({
             </DialogClose>
             <Button
               type='submit'
-              className='text-white'
+              className='text-primary-foreground'
             >
               {isLoading ? <Loader2 className='animate-spin' /> : type}
             </Button>
