@@ -26,6 +26,7 @@ import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/auth-store";
 import { createClientSupabase } from "@/lib/supabase/default";
+import Receipt from "./receipt";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClientSupabase();
@@ -39,7 +40,9 @@ export default function DetailOrder({ id }: { id: string }) {
     queryFn: async () => {
       const result = await supabase
         .from("orders")
-        .select("id, customer_name, status, payment_token, tables (name, id)")
+        .select(
+          "id, customer_name, status, payment_token, tables (name, id), created_at"
+        )
         .eq("order_id", id)
         .single();
 
@@ -223,10 +226,17 @@ export default function DetailOrder({ id }: { id: string }) {
     <div className='w-full space-y-4'>
       <div className='flex items-center justify-between gap-4 w-full'>
         <h1 className='text-2xl font-bold'>Detail Order</h1>
-        {profile.role !== "kitchen" && (
+        {profile.role !== "kitchen" && order?.status !== "settled" && (
           <Link href={`/order/${id}/add`}>
             <Button>Add Order Item</Button>
           </Link>
+        )}
+        {order?.status === "settled" && (
+          <Receipt
+            order={order}
+            orderMenu={orderMenu?.data}
+            orderId={id}
+          />
         )}
       </div>
 
